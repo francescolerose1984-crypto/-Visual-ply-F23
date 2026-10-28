@@ -1,0 +1,13 @@
+{
+  "name": "Visual-ply-F23",
+  "short_name": "Visual-ply-F23",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0b0d10",
+  "theme_color": "#0b0d10",
+  "description": "Visualizzatore PLY LiDAR fino a 2.000.000 di punti.",
+  "icons": [
+    {"src":"icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}
+  ]
+}

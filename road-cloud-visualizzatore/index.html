@@ -23,14 +23,14 @@
     <canvas id="gl" tabindex="0" aria-label="Visualizzatore 3D nuvole di punti"></canvas>
     <div class="hud"><div class="hud-chip ok">GPU <strong>WebGL</strong></div><div class="hud-chip">Punti <strong id="pointCount">0</strong></div><div class="hud-chip">Pivot <strong id="pivotMode">globale</strong></div></div>
     <div id="pivotDot" class="pivot-dot"></div>
-    <div id="empty" class="empty-state"><div class="empty-card"><img src="./icon-roadcloud.svg" alt=""><h2>Road Cloud Visualizzatore</h2><p>Apri una scansione oppure aggiungine più di una nello stesso spazio 3D.</p><div class="formats">PLY · LAS · LAZ · E57 · PTX · PCD · PTS · XYZ · CSV · TXT · ASC</div></div></div>
+    <div id="empty" class="empty-state"><div class="empty-card"><img src="./icon-roadcloud.svg" alt=""><h2>Road Cloud Visualizzatore</h2><p>Apri un segmento oppure direttamente una scansione completa RoadCloud in formato ZIP.</p><div class="formats">ROADCloud ZIP · PLY · LAS · LAZ · E57 · PTX · PCD · PTS · XYZ · CSV · TXT · ASC</div></div></div>
     <div id="status" class="status-strip">Pronto. I file restano sul dispositivo.</div>
     <nav class="bottom-dock" aria-label="Comandi visualizzatore"><button id="settingsBtn" class="dock-btn icon" type="button" aria-label="Impostazioni">⚙︎</button><button id="newBtn" class="dock-btn new" type="button">NUOVA</button><button id="addBtn" class="dock-btn add" type="button">＋ AGGIUNGI</button><button id="fitBtn" class="dock-btn icon" type="button" aria-label="Adatta vista">◉</button></nav>
-    <input id="addInput" class="hidden-input" type="file" multiple accept=".ply,.las,.laz,.e57,.ptx,.pcd,.pts,.xyz,.csv,.txt,.asc"><input id="newInput" class="hidden-input" type="file" multiple accept=".ply,.las,.laz,.e57,.ptx,.pcd,.pts,.xyz,.csv,.txt,.asc">
+    <input id="addInput" class="hidden-input" type="file" multiple accept=".zip,.ply,.las,.laz,.e57,.ptx,.pcd,.pts,.xyz,.csv,.txt,.asc,application/zip"><input id="newInput" class="hidden-input" type="file" multiple accept=".zip,.ply,.las,.laz,.e57,.ptx,.pcd,.pts,.xyz,.csv,.txt,.asc,application/zip">
     <div id="drawerBackdrop" class="drawer-backdrop"></div><section id="drawer" class="drawer" aria-label="Scansioni caricate"><div class="drawer-handle"></div><div class="drawer-head"><div><h2>Scansioni</h2><span id="drawerSummary">Nessuna scansione caricata</span></div><button id="closeDrawer" class="mini-btn" type="button">Chiudi</button></div><div id="layerList"></div></section>
     <div id="progress" class="progress-wrap" role="status" aria-live="polite"><div class="progress-card"><h3 id="progressTitle">Caricamento scansione</h3><p id="progressText">Lettura dati laser…</p><div class="progress-track"><div class="progress-bar"></div></div></div></div>
   </main>
 </div>
-<script type="module" src="./app.js"></script>
+<script type="module" src="./app-v2.js?v=2"></script>
 </body>
 </html>

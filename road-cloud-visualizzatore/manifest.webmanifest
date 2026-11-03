@@ -1,0 +1,19 @@
+{
+  "name": "Road Cloud Visualizzatore",
+  "short_name": "RC Visual",
+  "description": "Visualizzatore locale di nuvole di punti e dati laser scanner.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#02070c",
+  "theme_color": "#02070c",
+  "icons": [
+    {
+      "src": "./icon.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

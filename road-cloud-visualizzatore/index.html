@@ -26,11 +26,11 @@
     <div id="empty" class="empty-state"><div class="empty-card"><img src="./icon-roadcloud.svg" alt=""><h2>Road Cloud Visualizzatore</h2><p>Apri un segmento oppure direttamente una scansione completa RoadCloud in formato ZIP.</p><div class="formats">ROADCloud ZIP · PLY · LAS · LAZ · E57 · PTX · PCD · PTS · XYZ · CSV · TXT · ASC</div></div></div>
     <div id="status" class="status-strip">Pronto. I file restano sul dispositivo.</div>
     <nav class="bottom-dock" aria-label="Comandi visualizzatore"><button id="settingsBtn" class="dock-btn icon" type="button" aria-label="Impostazioni">⚙︎</button><button id="newBtn" class="dock-btn new" type="button">NUOVA</button><button id="addBtn" class="dock-btn add" type="button">＋ AGGIUNGI</button><button id="fitBtn" class="dock-btn icon" type="button" aria-label="Adatta vista">◉</button></nav>
-    <input id="addInput" class="hidden-input" type="file" multiple ><input id="newInput" class="hidden-input" type="file" multiple >
+    <input id="addInput" class="hidden-input" type="file" multiple accept="application/octet-stream,.ply,.zip,.las,.laz,.e57,.ptx,.pcd,.pts,.xyz,.csv,.txt,.asc"><input id="newInput" class="hidden-input" type="file" multiple accept="application/octet-stream,.ply,.zip,.las,.laz,.e57,.ptx,.pcd,.pts,.xyz,.csv,.txt,.asc">
     <div id="drawerBackdrop" class="drawer-backdrop"></div><section id="drawer" class="drawer" aria-label="Scansioni caricate"><div class="drawer-handle"></div><div class="drawer-head"><div><h2>Scansioni</h2><span id="drawerSummary">Nessuna scansione caricata</span></div><button id="closeDrawer" class="mini-btn" type="button">Chiudi</button></div><div id="layerList"></div></section>
     <div id="progress" class="progress-wrap" role="status" aria-live="polite"><div class="progress-card"><h3 id="progressTitle">Caricamento scansione</h3><p id="progressText">Lettura dati laser…</p><div class="progress-track"><div class="progress-bar"></div></div></div></div>
   </main>
 </div>
-<script type="module" src="./app-v2.js?v=3"></script>
+<script type="module" src="./app-v2.js?v=4"></script>
 </body>
 </html>

@@ -6,7 +6,7 @@ const gl = cv.getContext('webgl', {antialias:false, alpha:false, powerPreference
 const nf = new Intl.NumberFormat('it-IT');
 let S = readSettings();
 let layers = [], idSeq = 1;
-let yaw = -0.62, pitch = -0.36, dist = 10, target = [0,0,0], pivot = 'globale';
+let yaw = -0.62, pitch = 0.36, dist = 10, target = [0,0,0], pivot = 'globale';
 let ptr = new Map(), pinch = null, lastTap = 0, lastTapXY = [0,0];
 
 const clamp = (v,a,b) => Math.max(a, Math.min(b,v));
@@ -33,11 +33,15 @@ if(gl){
   L={p:gl.getAttribLocation(P,'p'),c:gl.getAttribLocation(P,'c'),it:gl.getAttribLocation(P,'it'),pr:gl.getUniformLocation(P,'pr'),v:gl.getUniformLocation(P,'v'),od:gl.getUniformLocation(P,'od'),ps:gl.getUniformLocation(P,'ps'),mode:gl.getUniformLocation(P,'mode'),z0:gl.getUniformLocation(P,'z0'),z1:gl.getUniformLocation(P,'z1'),imin:gl.getUniformLocation(P,'imin'),imax:gl.getUniformLocation(P,'imax'),oz:gl.getUniformLocation(P,'oz')};
 }
 
-const I=()=>[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1];
-const mul=(a,b)=>{const o=new Array(16).fill(0);for(let r=0;r<4;r++)for(let c=0;c<4;c++)for(let k=0;k<4;k++)o[c*4+r]+=a[k*4+r]*b[c*4+k];return o};
-const T=(x,y,z)=>{const m=I();m[12]=x;m[13]=y;m[14]=z;return m};
-const RX=a=>{const c=Math.cos(a),s=Math.sin(a);return[1,0,0,0,0,c,s,0,0,-s,c,0,0,0,0,1]};
-const RY=a=>{const c=Math.cos(a),s=Math.sin(a);return[c,0,-s,0,0,1,0,0,s,0,c,0,0,0,0,1]};
+// Z-up camera orbit: yaw turns around vertical Z, pitch tilts without any roll.
+function cameraBasis(){
+  const cy=Math.cos(yaw), sy=Math.sin(yaw), cp=Math.cos(pitch), sp=Math.sin(pitch);
+  return {right:[-sy,cy,0],up:[-sp*cy,-sp*sy,cp],back:[cp*cy,cp*sy,sp]};
+}
+function viewMatrix(){
+  const {right:r,up:u,back:b}=cameraBasis();
+  return [r[0],u[0],b[0],0,r[1],u[1],b[1],0,r[2],u[2],b[2],0,0,0,-dist,1];
+}
 const PER=(f,a,n,z)=>{const q=1/Math.tan(f/2),d=1/(n-z);return[q/a,0,0,0,0,q,0,0,0,0,(z+n)*d,-1,0,0,2*z*n*d,0]};
 
 function bounds(){
@@ -56,7 +60,7 @@ function bg(){ return S.background==='light'?[.76,.79,.82,1]:S.background==='dar
 function resize(){ const r=cv.getBoundingClientRect(),d=Math.min(devicePixelRatio||1,2),w=Math.max(1,Math.round(r.width*d)),h=Math.max(1,Math.round(r.height*d)); if(cv.width!==w||cv.height!==h){cv.width=w;cv.height=h;gl.viewport(0,0,w,h);} }
 function draw(){
   if(!gl) return; resize(); const B=bounds(),c=bg(); gl.clearColor(...c); gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT); if(!B)return;
-  const r=radius(),pr=PER(+S.fov*Math.PI/180,cv.width/cv.height,Math.max(1e-5,Math.min(dist*.01,r*.01)),Math.max(dist*100,r*50,1000)),v=mul(T(0,0,-dist),mul(RX(pitch),RY(yaw)));
+  const r=radius(),pr=PER(+S.fov*Math.PI/180,cv.width/cv.height,Math.max(1e-5,Math.min(dist*.01,r*.01)),Math.max(dist*100,r*50,1000)),v=viewMatrix();
   gl.enable(gl.DEPTH_TEST); gl.useProgram(P); gl.uniformMatrix4fv(L.pr,false,new Float32Array(pr)); gl.uniformMatrix4fv(L.v,false,new Float32Array(v)); gl.uniform1f(L.ps,+S.pointSize*(devicePixelRatio||1)); gl.uniform1f(L.z0,B[4]); gl.uniform1f(L.z1,B[5]);
   for(const l of layers) if(l.visible){
     let m=S.colorMode; if(m==='auto')m=l.rgb?'rgb':l.hasI?'intensity':'height'; if(m==='rgb'&&!l.rgb)m=l.hasI?'intensity':'height'; if(m==='intensity'&&!l.hasI)m=l.rgb?'rgb':'height';
@@ -212,11 +216,25 @@ function ui(){
   const box=$('layerList'); box.replaceChildren(); for(const l of layers){const row=document.createElement('div');row.className='layer-row';const vis=document.createElement('button');vis.className='vis-toggle'+(l.visible?'':' off');vis.textContent=l.visible?'●':'○';vis.onclick=()=>{l.visible=!l.visible;ui();draw()};const main=document.createElement('div');main.className='layer-main';main.innerHTML=`<div class="layer-name"></div><div class="layer-meta"></div>`;main.children[0].textContent=l.name;main.children[1].textContent=`${l.fmt} · ${nf.format(l.n)} / ${nf.format(l.total)} punti${l.rgb?' · RGB':''}${l.meta?' · '+l.meta:''}`;const ac=document.createElement('div');ac.className='layer-actions';const ce=document.createElement('button');ce.className='mini-btn';ce.textContent='Centra';ce.onclick=()=>{l.visible=true;fit(l.b);closeDrawer()};const de=document.createElement('button');de.className='mini-btn danger';de.textContent='×';de.onclick=()=>{remove(l);ui();draw();if(layers.length)fit()};ac.append(ce,de);row.append(vis,main,ac);box.append(row);} hud();
 }
 
-function project(w,r){const dx=w[0]-target[0],dy=w[1]-target[1],dz=w[2]-target[2],cy=Math.cos(yaw),sy=Math.sin(yaw),cp=Math.cos(pitch),sp=Math.sin(pitch),x=cy*dx+sy*dz,z=-sy*dx+cy*dz,y=cp*dy-sp*z,zc=sp*dy+cp*z-dist;if(zc>=0)return null;const f=1/Math.tan(+S.fov*Math.PI/360),nx=f/(r.width/r.height)*x/-zc,ny=f*y/-zc;if(Math.abs(nx)>1.4||Math.abs(ny)>1.4)return null;return{x:(nx*.5+.5)*r.width,y:(1-(ny*.5+.5))*r.height};}
+function project(w,r){
+  const q=[w[0]-target[0],w[1]-target[1],w[2]-target[2]];
+  const {right,up,back}=cameraBasis();
+  const dot=(a,b)=>a[0]*b[0]+a[1]*b[1]+a[2]*b[2];
+  const x=dot(right,q),y=dot(up,q),zc=dot(back,q)-dist;
+  if(zc>=0)return null;
+  const f=1/Math.tan(+S.fov*Math.PI/360),nx=f/(r.width/r.height)*x/-zc,ny=f*y/-zc;
+  if(Math.abs(nx)>1.4||Math.abs(ny)>1.4)return null;
+  return{x:(nx*.5+.5)*r.width,y:(1-(ny*.5+.5))*r.height};
+}
 function pick(cx,cy,rad=60){const r=cv.getBoundingClientRect(),x=cx-r.left,y=cy-r.top;let best=null,bd=rad*rad;const ls=layers.filter(l=>l.visible),per=Math.max(900,Math.floor(24000/Math.max(1,ls.length)));for(const l of ls){const st=Math.max(1,Math.ceil(l.n/per));for(let k=0;k<l.n;k+=st){const w=[l.p[k*3]+l.o[0],l.p[k*3+1]+l.o[1],l.p[k*3+2]+l.o[2]],q=project(w,r);if(!q)continue;const d=(q.x-x)**2+(q.y-y)**2;if(d<bd){bd=d;best=w;}}}return best;}
 function pivotAt(x,y,z=1){const w=pick(x,y);if(!w)return false;target=w;pivot='locale';dist=clamp(dist*z,Math.max(1e-6,radius()*1e-6),Math.max(1000,radius()*1e5));$('pivotDot').classList.add('show');setTimeout(()=>$('pivotDot').classList.remove('show'),700);hud();draw();return true;}
-function pan(dx,dy){const r=cv.getBoundingClientRect(),q=2*dist*Math.tan(+S.fov*Math.PI/360)/Math.max(1,r.height)*(+S.panSpeed),cy=Math.cos(yaw),sy=Math.sin(yaw),cp=Math.cos(pitch),sp=Math.sin(pitch),R=[cy,0,sy],U=[sp*sy,cp,-sp*cy];for(let j=0;j<3;j++)target[j]+=-R[j]*dx*q+U[j]*dy*q;pivot='manuale';hud();}
-
+function pan(dx,dy){
+  const r=cv.getBoundingClientRect();
+  const q=2*dist*Math.tan(+S.fov*Math.PI/360)/Math.max(1,r.height)*(+S.panSpeed);
+  const {right,up}=cameraBasis();
+  for(let j=0;j<3;j++)target[j]+=-right[j]*dx*q+up[j]*dy*q;
+  pivot='manuale';hud();
+}
 cv.addEventListener('pointerdown',e=>{cv.setPointerCapture(e.pointerId);ptr.set(e.pointerId,{x:e.clientX,y:e.clientY,px:e.clientX,py:e.clientY,sx:e.clientX,sy:e.clientY,m:false,multi:false,pan:e.shiftKey||e.button===2});if(ptr.size>=2){for(const p of ptr.values())p.multi=true;const a=[...ptr.values()],mx=(a[0].x+a[1].x)/2,my=(a[0].y+a[1].y)/2;pinch={d:Math.hypot(a[0].x-a[1].x,a[0].y-a[1].y),dist};if(S.autoPivot)pivotAt(mx,my);}});
 cv.addEventListener('pointermove',e=>{const p=ptr.get(e.pointerId);if(!p)return;p.px=p.x;p.py=p.y;p.x=e.clientX;p.y=e.clientY;if(Math.hypot(p.x-p.sx,p.y-p.sy)>5)p.m=true;if(ptr.size>=2){const a=[...ptr.values()],d=Math.max(5,Math.hypot(a[0].x-a[1].x,a[0].y-a[1].y));if(pinch)dist=clamp(pinch.dist*Math.pow(pinch.d/d,+S.zoomSpeed),radius()*1e-6,Math.max(1000,radius()*1e5));pan(((a[0].x-a[0].px)+(a[1].x-a[1].px))/2,((a[0].y-a[0].py)+(a[1].y-a[1].py))/2);}else if(p.pan||e.shiftKey)pan(p.x-p.px,p.y-p.py);else{yaw+=(p.x-p.px)*.006*(+S.orbitSpeed)*(S.invertX?-1:1);pitch=clamp(pitch+(p.y-p.py)*.006*(+S.orbitSpeed)*(S.invertY?-1:1),-1.54,1.54);}draw();});
 function end(e){const p=ptr.get(e.pointerId);if(!p)return;ptr.delete(e.pointerId);if(ptr.size<2)pinch=null;if(!p.multi&&!p.m&&e.type==='pointerup'){const n=performance.now(),dbl=n-lastTap<330&&Math.hypot(e.clientX-lastTapXY[0],e.clientY-lastTapXY[1])<35;if(dbl){pivotAt(e.clientX,e.clientY,.5);lastTap=0;}else{pivotAt(e.clientX,e.clientY);lastTap=n;lastTapXY=[e.clientX,e.clientY];}}}

@@ -1,0 +1,1 @@
+L'icona grafica dell'app viene mantenuta separata dalla repository RoadCloud originale.

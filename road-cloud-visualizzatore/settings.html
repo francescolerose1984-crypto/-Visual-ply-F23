@@ -4,10 +4,10 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#02070c"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>Impostazioni · Road Cloud Visualizzatore</title>
-<link rel="apple-touch-icon" href="./icon.png"><link rel="stylesheet" href="./style.css">
+<link rel="apple-touch-icon" href="./icon-roadcloud.svg"><link rel="stylesheet" href="./style.css">
 </head>
 <body class="settings-page">
-<header class="settings-top"><button id="back" class="back-btn" type="button">‹</button><img class="brand-icon" src="./icon.png" alt=""><div class="settings-title"><h1>Impostazioni</h1><p>Road Cloud Visualizzatore</p></div></header>
+<header class="settings-top"><button id="back" class="back-btn" type="button">‹</button><img class="brand-icon" src="./icon-roadcloud.svg" alt=""><div class="settings-title"><h1>Impostazioni</h1><p>Road Cloud Visualizzatore</p></div></header>
 <main class="settings-content">
   <section class="setting-group"><div class="group-label">Nuvola di punti</div><div class="setting-card">
     <div class="setting-row"><div class="setting-text"><b>Punti massimi per scansione</b><small>Il file completo non viene modificato; il viewer campiona solo la visualizzazione.</small></div><select id="maxPoints"><option value="250000">250.000</option><option value="500000">500.000</option><option value="1000000">1.000.000</option><option value="1500000">1.500.000</option><option value="2000000">2.000.000</option><option value="3000000">3.000.000</option><option value="4000000">4.000.000</option></select></div>
@@ -15,7 +15,6 @@
     <div class="setting-row"><div class="setting-text"><b>Colore predefinito</b><small>RGB se presente, oppure quota/intensità.</small></div><select id="colorMode"><option value="auto">Automatico</option><option value="rgb">RGB</option><option value="height">Quota Z</option><option value="intensity">Intensità</option><option value="mono">Monocromatico</option></select></div>
     <div class="setting-row"><div class="setting-text"><b>Sfondo</b><small>Colore del viewport 3D.</small></div><select id="background"><option value="black">Nero</option><option value="dark">Blu scuro</option><option value="light">Chiaro</option></select></div>
   </div></section>
-
   <section class="setting-group"><div class="group-label">Camera e movimento</div><div class="setting-card">
     <div class="setting-row"><div class="setting-text"><b>Pivot automatico sullo zoom</b><small>Pinch o rotella cercano un punto vicino al cursore e lo usano come centro di rotazione.</small></div><label class="switch"><input id="autoPivot" type="checkbox"><span></span></label></div>
     <div class="setting-row"><div class="setting-text"><b>Campo visivo</b><small>FOV della camera prospettica.</small></div><input id="fov" type="range" min="30" max="90" step="1"><span id="fovV" class="setting-value"></span></div>
@@ -25,12 +24,8 @@
     <div class="setting-row"><div class="setting-text"><b>Inverti rotazione orizzontale</b></div><label class="switch"><input id="invertX" type="checkbox"><span></span></label></div>
     <div class="setting-row"><div class="setting-text"><b>Inverti rotazione verticale</b></div><label class="switch"><input id="invertY" type="checkbox"><span></span></label></div>
   </div></section>
-
-  <section class="setting-group"><div class="group-label">Dati e compatibilità</div><div class="setting-card">
-    <div class="about"><b>Formati supportati</b><br>PLY ASCII/Binary · LAS 1.0–1.4 non compresso · LAZ · E57 · PTX · PCD ASCII/Binary · PTS · XYZ · CSV · TXT · ASC.<br><br>I file vengono elaborati localmente nel browser. E57 e LAZ possono richiedere più memoria sui file molto grandi.</div>
-  </div></section>
-  <button id="reset" class="reset-settings" type="button">Ripristina impostazioni predefinite</button>
-  <div class="version">Road Cloud Visualizzatore · v1.0</div>
+  <section class="setting-group"><div class="group-label">Dati e compatibilità</div><div class="setting-card"><div class="about"><b>Formati supportati</b><br>PLY ASCII/Binary · LAS 1.0–1.4 non compresso · LAZ · E57 · PTX · PCD ASCII/Binary · PTS · XYZ · CSV · TXT · ASC.<br><br>I file vengono elaborati localmente nel browser. E57 e LAZ possono richiedere più memoria sui file molto grandi.</div></div></section>
+  <button id="reset" class="reset-settings" type="button">Ripristina impostazioni predefinite</button><div class="version">Road Cloud Visualizzatore · v1.0</div>
 </main>
 <script type="module" src="./settings.js"></script>
 </body></html>

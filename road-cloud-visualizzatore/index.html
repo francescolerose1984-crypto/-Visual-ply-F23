@@ -9,52 +9,25 @@
 <meta name="apple-mobile-web-app-title" content="Road Cloud Visualizzatore">
 <title>Road Cloud Visualizzatore</title>
 <link rel="manifest" href="./manifest.webmanifest">
-<link rel="apple-touch-icon" href="./icon.png">
+<link rel="apple-touch-icon" href="./icon-roadcloud.svg">
 <link rel="stylesheet" href="./style.css">
 </head>
 <body>
 <div class="app">
   <header class="topbar">
-    <img class="brand-icon" src="./icon.png" alt="RoadCloud">
+    <img class="brand-icon" src="./icon-roadcloud.svg" alt="RoadCloud">
     <div class="brand"><h1>Road Cloud Visualizzatore</h1><p id="topSub">Viewer laser scanner · locale sul dispositivo</p></div>
     <div class="top-actions"><button id="layersBtn" class="pill-btn" type="button">SCANSIONI <span id="layerCount">0</span></button></div>
   </header>
-
   <main class="viewer-shell" id="viewerShell">
     <canvas id="gl" tabindex="0" aria-label="Visualizzatore 3D nuvole di punti"></canvas>
-    <div class="hud">
-      <div class="hud-chip ok">GPU <strong>WebGL</strong></div>
-      <div class="hud-chip">Punti <strong id="pointCount">0</strong></div>
-      <div class="hud-chip">Pivot <strong id="pivotMode">globale</strong></div>
-    </div>
+    <div class="hud"><div class="hud-chip ok">GPU <strong>WebGL</strong></div><div class="hud-chip">Punti <strong id="pointCount">0</strong></div><div class="hud-chip">Pivot <strong id="pivotMode">globale</strong></div></div>
     <div id="pivotDot" class="pivot-dot"></div>
-    <div id="empty" class="empty-state">
-      <div class="empty-card">
-        <img src="./icon.png" alt="">
-        <h2>Road Cloud Visualizzatore</h2>
-        <p>Apri una scansione oppure aggiungine più di una nello stesso spazio 3D.</p>
-        <div class="formats">PLY · LAS · LAZ · E57 · PTX · PCD · PTS · XYZ · CSV · TXT · ASC</div>
-      </div>
-    </div>
-
+    <div id="empty" class="empty-state"><div class="empty-card"><img src="./icon-roadcloud.svg" alt=""><h2>Road Cloud Visualizzatore</h2><p>Apri una scansione oppure aggiungine più di una nello stesso spazio 3D.</p><div class="formats">PLY · LAS · LAZ · E57 · PTX · PCD · PTS · XYZ · CSV · TXT · ASC</div></div></div>
     <div id="status" class="status-strip">Pronto. I file restano sul dispositivo.</div>
-    <nav class="bottom-dock" aria-label="Comandi visualizzatore">
-      <button id="settingsBtn" class="dock-btn icon" type="button" aria-label="Impostazioni">⚙︎</button>
-      <button id="newBtn" class="dock-btn new" type="button">NUOVA</button>
-      <button id="addBtn" class="dock-btn add" type="button">＋ AGGIUNGI</button>
-      <button id="fitBtn" class="dock-btn icon" type="button" aria-label="Adatta vista">◉</button>
-    </nav>
-
-    <input id="addInput" class="hidden-input" type="file" multiple accept=".ply,.las,.laz,.e57,.ptx,.pcd,.pts,.xyz,.csv,.txt,.asc">
-    <input id="newInput" class="hidden-input" type="file" multiple accept=".ply,.las,.laz,.e57,.ptx,.pcd,.pts,.xyz,.csv,.txt,.asc">
-
-    <div id="drawerBackdrop" class="drawer-backdrop"></div>
-    <section id="drawer" class="drawer" aria-label="Scansioni caricate">
-      <div class="drawer-handle"></div>
-      <div class="drawer-head"><div><h2>Scansioni</h2><span id="drawerSummary">Nessuna scansione caricata</span></div><button id="closeDrawer" class="mini-btn" type="button">Chiudi</button></div>
-      <div id="layerList"></div>
-    </section>
-
+    <nav class="bottom-dock" aria-label="Comandi visualizzatore"><button id="settingsBtn" class="dock-btn icon" type="button" aria-label="Impostazioni">⚙︎</button><button id="newBtn" class="dock-btn new" type="button">NUOVA</button><button id="addBtn" class="dock-btn add" type="button">＋ AGGIUNGI</button><button id="fitBtn" class="dock-btn icon" type="button" aria-label="Adatta vista">◉</button></nav>
+    <input id="addInput" class="hidden-input" type="file" multiple accept=".ply,.las,.laz,.e57,.ptx,.pcd,.pts,.xyz,.csv,.txt,.asc"><input id="newInput" class="hidden-input" type="file" multiple accept=".ply,.las,.laz,.e57,.ptx,.pcd,.pts,.xyz,.csv,.txt,.asc">
+    <div id="drawerBackdrop" class="drawer-backdrop"></div><section id="drawer" class="drawer" aria-label="Scansioni caricate"><div class="drawer-handle"></div><div class="drawer-head"><div><h2>Scansioni</h2><span id="drawerSummary">Nessuna scansione caricata</span></div><button id="closeDrawer" class="mini-btn" type="button">Chiudi</button></div><div id="layerList"></div></section>
     <div id="progress" class="progress-wrap" role="status" aria-live="polite"><div class="progress-card"><h3 id="progressTitle">Caricamento scansione</h3><p id="progressText">Lettura dati laser…</p><div class="progress-track"><div class="progress-bar"></div></div></div></div>
   </main>
 </div>

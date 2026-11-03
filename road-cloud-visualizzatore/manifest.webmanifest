@@ -8,12 +8,5 @@
   "orientation": "any",
   "background_color": "#02070c",
   "theme_color": "#02070c",
-  "icons": [
-    {
-      "src": "./icon.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any maskable"
-    }
-  ]
+  "icons": [{"src":"./icon-roadcloud.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]
 }
